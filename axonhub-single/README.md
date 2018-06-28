@@ -1,6 +1,6 @@
 # Cheatsheet with useful Docker/Kubectl commands
 
-### Building the docker image, tagging it as "axondb-single"
+### Building the docker image, tagging it as "axonhub-single"
 ```
 docker build ./docker -t axonhub-single
 ```
@@ -17,7 +17,7 @@ docker run --rm -p8024:8024 -p8124:8124 -m 1G -e axoniq.axonhub.hostname=localho
 export DOCKER_IMAGE_PREFIX=<set as appropriate>
 ```
 
-### Pushing the docker image to the google container repo
+### Pushing the docker image to the container repo
 ```
 docker tag axonhub-single $DOCKER_IMAGE_PREFIX/axonhub-single
 docker push $DOCKER_IMAGE_PREFIX/axonhub-single

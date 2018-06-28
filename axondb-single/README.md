@@ -16,14 +16,13 @@ The data connection won't go through the host, but over the container network.
 docker run --rm -p8023:8023 -m 1G --name axondb -h axondb axondb-single
 ```
 
-
 ### Setting the prefix for the docker repository
 (This is assumed to have been done in the following commands.)
 ```
 export DOCKER_IMAGE_PREFIX=<set as appropriate>
 ```
 
-### Pushing the docker image to the google container repo
+### Pushing the docker image to the container repo
 ```
 docker tag axondb-single $DOCKER_IMAGE_PREFIX/axondb-single
 docker push $DOCKER_IMAGE_PREFIX/axondb-single
