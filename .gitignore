@@ -1,0 +1,4 @@
+#
+# jar files of AxonDB and AxonHub should be downloaded through axoniq.io and added manually
+#
+*.jar

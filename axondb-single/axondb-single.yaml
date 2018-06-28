@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: axondb
+  labels:
+    app: axondb
+spec:
+  ports:
+  - port: 8123
+    name: grpc
+    targetPort: 8123
+  clusterIP: None
+  selector:
+    app: axondb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: axondb-gui
+  labels:
+    app: axondb
+spec:
+  ports:
+  - port: 8023
+    name: gui
+    targetPort: 8023
+  selector:
+    app: axondb
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: axondb
+spec:
+  serviceName: "axondb"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: axondb
+  template:
+    metadata:
+      labels:
+        app: axondb
+    spec:
+      containers:
+      - name: axondb
+        image: $DOCKER_IMAGE_PREFIX/axondb-single
+        imagePullPolicy: Always
+        env:
+        - name: axoniq.axondb.domain
+          value: "axondb.default.svc.cluster.local"        
+        ports:
+        - containerPort: 8123
+          protocol: TCP 
+          name: grpc
+        - containerPort: 8023
+          protocol: TCP 
+          name: gui
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8023
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 1          
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
